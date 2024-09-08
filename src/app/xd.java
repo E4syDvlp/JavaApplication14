@@ -33,9 +33,10 @@ conex con=new conex();
         setVisible(true);
         this.ocultar1.setVisible(false);
         //recordar contraseña
-        String password = getPasswordFromFile();
-        if(password != null){
-            txtPasswordLogin.setText(password);
+        String[] credentials = getCredentialsFromFile();
+    if (credentials != null) {
+        txtUsuarioLogin.setText(credentials[0]);
+        txtPasswordLogin.setText(credentials[1]);
         }
     }
 
@@ -264,40 +265,41 @@ conex con=new conex();
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
 if(jCheckBox1.isSelected()){
     //Guardar la contraseña en un archivo de configuracion o base de datos
-    String password = txtPasswordLogin.getText();
-    savePasswordToFile(password);
-}else{
-    //Borrar la contraseña guardada
-    deletePasswordFile();
-}
+    String usuario = txtUsuarioLogin.getText();
+        String password = txtPasswordLogin.getText();
+        saveCredentialsToFile(usuario, password);
+    } else {
+        // Borrar las credenciales guardadas
+        deleteCredentialsFile();
+    }
     }//GEN-LAST:event_jCheckBox1ActionPerformed
-private void savePasswordToFile(String password) {
+private void saveCredentialsToFile(String usuario, String password) {
     try {
-        // Utiliza un archivo de configuración o base de datos para guardar la contraseña
-        FileWriter fileWriter = new FileWriter("password.txt");
-        fileWriter.write(password);
+        // Utiliza un archivo de configuración o base de datos para guardar el usuario y la contraseña
+        FileWriter fileWriter = new FileWriter("credentials.txt");
+        fileWriter.write(usuario + "," + password);
         fileWriter.close();
     } catch (IOException e) {
         // Manejar la excepción
     }
 }
-private String getPasswordFromFile() {
+private String[] getCredentialsFromFile() {
     try {
-        // Utiliza un archivo de configuración o base de datos para recuperar la contraseña
-        FileReader fileReader = new FileReader("password.txt");
+        // Utiliza un archivo de configuración o base de datos para recuperar el usuario y la contraseña
+        FileReader fileReader = new FileReader("credentials.txt");
         BufferedReader bufferedReader = new BufferedReader(fileReader);
-        String password = bufferedReader.readLine();
+        String credentials = bufferedReader.readLine();
         bufferedReader.close();
-        return password;
+        return credentials.split(",");
     } catch (IOException e) {
         // Manejar la excepción
         return null;
     }
 }
-private void deletePasswordFile() {
+private void deleteCredentialsFile() {
     try {
-        // Borrar el archivo de configuración o base de datos que contiene la contraseña
-        File file = new File("password.txt");
+        // Borrar el archivo de configuración o base de datos que contiene el usuario y la contraseña
+        File file = new File("credentials.txt");
         file.delete();
     } catch (Exception e) {
         // Manejar la excepción
