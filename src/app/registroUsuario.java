@@ -4,13 +4,22 @@
  */
 package app;
 
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.PreparedStatement;
+import conexion.conex;
+import java.awt.event.KeyEvent;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author RYZEN 7
  */
 public class registroUsuario extends javax.swing.JFrame {
+    conex con=new conex();
+        Connection cn=con.ConectarBD();
 
     /**
      * Creates new form registroUsuario
@@ -22,6 +31,8 @@ public class registroUsuario extends javax.swing.JFrame {
         setExtendedState(JFrame.NORMAL);
         setResizable(false);
         setVisible(true);
+        this.ocultar2.setVisible(false);
+        this.ocultar3.setVisible(false);
     }
 
     registroUsuario(Object object, boolean b) {
@@ -50,7 +61,7 @@ public class registroUsuario extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        txtApellidos = new javax.swing.JTextField();
+        txtEmail = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         txtNombres = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
@@ -58,10 +69,15 @@ public class registroUsuario extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         comboTipoUsuario = new javax.swing.JComboBox<>();
-        btnRegistro = new javax.swing.JButton();
+        btnRegistrox = new javax.swing.JButton();
         txtPassword = new javax.swing.JPasswordField();
         txtCPassword = new javax.swing.JPasswordField();
-        txtEmail = new javax.swing.JPasswordField();
+        txtApellidos = new javax.swing.JTextField();
+        btnAbrirLogin = new javax.swing.JButton();
+        ver2 = new javax.swing.JLabel();
+        ocultar2 = new javax.swing.JLabel();
+        ver3 = new javax.swing.JLabel();
+        ocultar3 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/162.png"))); // NOI18N
@@ -83,7 +99,7 @@ public class registroUsuario extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/141.png"))); // NOI18N
         jLabel1.setText("jLabel1");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 380, 740, 720));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 430, 740, 720));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/image-removebg-preview (5).png"))); // NOI18N
         jLabel4.setText("jLabel4");
@@ -121,13 +137,13 @@ public class registroUsuario extends javax.swing.JFrame {
         jLabel10.setText("Apellidos");
         jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 150, 30));
 
-        txtApellidos.setBackground(new java.awt.Color(204, 204, 204));
-        txtApellidos.addActionListener(new java.awt.event.ActionListener() {
+        txtEmail.setBackground(new java.awt.Color(204, 204, 204));
+        txtEmail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtApellidosActionPerformed(evt);
+                txtEmailActionPerformed(evt);
             }
         });
-        jPanel2.add(txtApellidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 430, 40));
+        jPanel2.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 430, 40));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(51, 51, 51));
@@ -138,6 +154,11 @@ public class registroUsuario extends javax.swing.JFrame {
         txtNombres.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNombresActionPerformed(evt);
+            }
+        });
+        txtNombres.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombresKeyTyped(evt);
             }
         });
         jPanel2.add(txtNombres, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 430, 40));
@@ -169,18 +190,18 @@ public class registroUsuario extends javax.swing.JFrame {
         comboTipoUsuario.setBorder(null);
         jPanel2.add(comboTipoUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 500, -1, -1));
 
-        btnRegistro.setBackground(new java.awt.Color(51, 51, 255));
-        btnRegistro.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
-        btnRegistro.setForeground(new java.awt.Color(255, 255, 255));
-        btnRegistro.setText("Registrarse");
-        btnRegistro.setBorder(null);
-        btnRegistro.setBorderPainted(false);
-        btnRegistro.addActionListener(new java.awt.event.ActionListener() {
+        btnRegistrox.setBackground(new java.awt.Color(51, 102, 255));
+        btnRegistrox.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
+        btnRegistrox.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegistrox.setText("Registrarse");
+        btnRegistrox.setBorder(null);
+        btnRegistrox.setBorderPainted(false);
+        btnRegistrox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegistroActionPerformed(evt);
+                btnRegistroxActionPerformed(evt);
             }
         });
-        jPanel2.add(btnRegistro, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 540, 360, 40));
+        jPanel2.add(btnRegistrox, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 550, 230, 40));
 
         txtPassword.setBackground(new java.awt.Color(204, 204, 204));
         txtPassword.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
@@ -190,9 +211,63 @@ public class registroUsuario extends javax.swing.JFrame {
         txtCPassword.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
         jPanel2.add(txtCPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 430, 430, 40));
 
-        txtEmail.setBackground(new java.awt.Color(204, 204, 204));
-        txtEmail.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
-        jPanel2.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 430, 40));
+        txtApellidos.setBackground(new java.awt.Color(204, 204, 204));
+        txtApellidos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtApellidosActionPerformed(evt);
+            }
+        });
+        txtApellidos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtApellidosKeyTyped(evt);
+            }
+        });
+        jPanel2.add(txtApellidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, 430, 40));
+
+        btnAbrirLogin.setBackground(new java.awt.Color(255, 0, 51));
+        btnAbrirLogin.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
+        btnAbrirLogin.setForeground(new java.awt.Color(255, 255, 255));
+        btnAbrirLogin.setText("Ir al inicio de sesión");
+        btnAbrirLogin.setBorder(null);
+        btnAbrirLogin.setBorderPainted(false);
+        btnAbrirLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAbrirLoginActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btnAbrirLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 550, 230, 40));
+
+        ver2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/image-removebg-preview (6) (2).png"))); // NOI18N
+        ver2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ver2MouseClicked(evt);
+            }
+        });
+        jPanel2.add(ver2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 370, 30, 30));
+
+        ocultar2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/image-removebg-preview (7) (1).png"))); // NOI18N
+        ocultar2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ocultar2MouseClicked(evt);
+            }
+        });
+        jPanel2.add(ocultar2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 370, -1, -1));
+
+        ver3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/image-removebg-preview (6) (2).png"))); // NOI18N
+        ver3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ver3MouseClicked(evt);
+            }
+        });
+        jPanel2.add(ver3, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 440, 30, 30));
+
+        ocultar3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/image-removebg-preview (7) (1).png"))); // NOI18N
+        ocultar3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ocultar3MouseClicked(evt);
+            }
+        });
+        jPanel2.add(ocultar3, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 440, 30, 30));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 10, 540, 610));
 
@@ -205,21 +280,131 @@ public class registroUsuario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtApellidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtApellidosActionPerformed
+    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtApellidosActionPerformed
+    }//GEN-LAST:event_txtEmailActionPerformed
 
     private void txtNombresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombresActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombresActionPerformed
 
-    private void btnRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistroActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnRegistroActionPerformed
+    private void btnRegistroxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistroxActionPerformed
+        String nombres = txtNombres.getText();
+        String apellidos = txtApellidos.getText();
+        String email = txtEmail.getText();
+        String tipousuario = comboTipoUsuario.getSelectedItem().toString();
+        String contraseña = txtPassword.getText();
+        String confirmarContraseña = txtCPassword.getText();
+        //Validación
+        if(nombres.isEmpty()||apellidos.isEmpty()||email.isEmpty()||contraseña.isEmpty())
+            JOptionPane.showMessageDialog(null, "Debe completar todos los datos");
+        else{
+            if(tipousuario.equalsIgnoreCase("Seleccionar")){
+                JOptionPane.showMessageDialog(null, "Seleccione el tipo de usuario");
+            }else{
+                if(isEmailC(email)&& contraseña.equals(confirmarContraseña)&&esContraseñaSegura(contraseña)){
+                try {
+                    String consulta="INSERT INTO usuarios(nombres,apellidos,tipousuario,email,contraseña)values('"+nombres+"','"+apellidos+"','"+tipousuario+"','"+email+"','"+contraseña+"')"; 
+                    PreparedStatement ps = (PreparedStatement) cn.prepareStatement(consulta);
+                    ps.executeUpdate();
+                    limpiar();
+            JOptionPane.showMessageDialog(null, "¡Datos registrados con éxito!");
 
-    /**
-     * @param args the command line arguments
-     */
+                } catch (Exception e) {
+      JOptionPane.showMessageDialog(null, "No se pudo registrar sus datos"+e);
+
+                }
+            }else{
+                     if(!isEmailC(email)){
+                        JOptionPane.showMessageDialog(null, "El correo electrónico no es valido");
+                    }else{
+                        if(!esContraseñaSegura(contraseña)){
+                            JOptionPane.showMessageDialog(null, "La contraseña debe de contener almenos una letra mayuscula, una minuscula, un número y un carácter especial para garantizar su seguridad, vuelva a intentarlo.");
+                        }else{
+                        JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden");
+                    }
+                }
+                }
+        }
+        }
+    }//GEN-LAST:event_btnRegistroxActionPerformed
+
+    private void txtApellidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtApellidosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtApellidosActionPerformed
+ public boolean isEmailC(String correox) {
+    String EMAIL_PATTERN = 
+        "^[_A-Za-z0-9-+]+(\\.[_A-Za-z0-9-]+)*@" 
+        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+    Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+    Matcher matcher = pattern.matcher(correox);
+    return matcher.matches();
+}
+    private void btnAbrirLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbrirLoginActionPerformed
+        // TODO add your handling code here:
+        xd loginx = new xd();
+        loginx.setVisible(true);
+        this.dispose();
+        
+    }//GEN-LAST:event_btnAbrirLoginActionPerformed
+
+    private void txtNombresKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombresKeyTyped
+        if(!(Character.isLetter(evt.getKeyChar()))&& !(evt.getKeyChar()==KeyEvent.VK_SPACE)){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNombresKeyTyped
+
+    private void txtApellidosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidosKeyTyped
+              if(!(Character.isLetter(evt.getKeyChar()))&& !(evt.getKeyChar()==KeyEvent.VK_SPACE)){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtApellidosKeyTyped
+
+    private void ver2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ver2MouseClicked
+        ver2.setVisible(false);
+ocultar2.setVisible(true);
+txtPassword.setEchoChar((char)0);
+    }//GEN-LAST:event_ver2MouseClicked
+
+    private void ver3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ver3MouseClicked
+        ver3.setVisible(false);
+ocultar3.setVisible(true);
+txtCPassword.setEchoChar((char)0);
+    }//GEN-LAST:event_ver3MouseClicked
+
+    private void ocultar2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ocultar2MouseClicked
+    ver2.setVisible(true);
+      ocultar2.setVisible(false);
+   txtPassword.setEchoChar('*');
+    }//GEN-LAST:event_ocultar2MouseClicked
+
+    private void ocultar3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ocultar3MouseClicked
+   ver3.setVisible(true);
+      ocultar3.setVisible(false);
+   txtCPassword.setEchoChar('*');
+    }//GEN-LAST:event_ocultar3MouseClicked
+
+    private boolean esContraseñaSegura(String contraseña){
+        if(contraseña.length()<8){
+            return false;
+        }
+        boolean tieneMayuscula = false;
+        boolean tieneMinuscula = false;
+        boolean tieneNumero=false;
+        boolean tieneCaracterEspecial = false;
+        for(char c : contraseña.toCharArray()){
+            if(Character.isUpperCase(c)){
+            tieneMayuscula=true;
+        }else if(Character.isLowerCase(c)){
+            tieneMinuscula=true;
+        }else if(Character.isDigit(c)){
+            tieneNumero=true;
+        }else if(!Character.isLetterOrDigit(c)){
+            tieneCaracterEspecial=true;
+        }
+        }
+        return tieneMayuscula&&tieneMinuscula&&tieneNumero&&tieneCaracterEspecial;
+    }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -253,7 +438,8 @@ public class registroUsuario extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnRegistro;
+    private javax.swing.JButton btnAbrirLogin;
+    private javax.swing.JButton btnRegistrox;
     private javax.swing.JComboBox<String> comboTipoUsuario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -274,10 +460,20 @@ public class registroUsuario extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel ocultar2;
+    private javax.swing.JLabel ocultar3;
     private javax.swing.JTextField txtApellidos;
     private javax.swing.JPasswordField txtCPassword;
-    private javax.swing.JPasswordField txtEmail;
+    private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtNombres;
     private javax.swing.JPasswordField txtPassword;
+    private javax.swing.JLabel ver2;
+    private javax.swing.JLabel ver3;
     // End of variables declaration//GEN-END:variables
+void limpiar(){
+    txtNombres.setText("");
+    txtApellidos.setText("");
+    txtPassword.setText("");
+    txtEmail.setText("");   
+}
 }

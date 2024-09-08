@@ -3,16 +3,26 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package app;
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.PreparedStatement;
+import conexion.conex;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import java.sql.ResultSet;
 /**
  *
  * @author RYZEN 7
  */
 public class xd extends javax.swing.JFrame {
-
-
+conex con=new conex();
+        Connection cn=con.ConectarBD();
 
     public xd() {
         initComponents();
@@ -21,6 +31,12 @@ public class xd extends javax.swing.JFrame {
         setExtendedState(JFrame.NORMAL);
         setResizable(false);
         setVisible(true);
+        this.ocultar1.setVisible(false);
+        //recordar contraseña
+        String password = getPasswordFromFile();
+        if(password != null){
+            txtPasswordLogin.setText(password);
+        }
     }
 
     /**
@@ -53,6 +69,8 @@ public class xd extends javax.swing.JFrame {
         abrirRegistro = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         txtPasswordLogin = new javax.swing.JPasswordField();
+        ver1 = new javax.swing.JLabel();
+        ocultar1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -66,7 +84,7 @@ public class xd extends javax.swing.JFrame {
 
         jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/istockphoto-1503385646-612x612-removebg-preview.png"))); // NOI18N
         jLabel12.setText("jLabel12");
-        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 230, -1, -1));
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 230, -1, -1));
 
         jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/image-removebg-preview.png"))); // NOI18N
         jLabel13.setText("jLabel13");
@@ -185,6 +203,22 @@ public class xd extends javax.swing.JFrame {
         txtPasswordLogin.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
         jPanel2.add(txtPasswordLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, 370, 40));
 
+        ver1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/image-removebg-preview (6) (2).png"))); // NOI18N
+        ver1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ver1MouseClicked(evt);
+            }
+        });
+        jPanel2.add(ver1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 300, 30, 30));
+
+        ocultar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/image-removebg-preview (7) (1).png"))); // NOI18N
+        ocultar1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ocultar1MouseClicked(evt);
+            }
+        });
+        jPanel2.add(ocultar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 300, 30, 30));
+
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 30, 450, 540));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/159.png"))); // NOI18N
@@ -228,11 +262,81 @@ public class xd extends javax.swing.JFrame {
     }//GEN-LAST:event_txtUsuarioLoginActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        // TODO add your handling code here:
+if(jCheckBox1.isSelected()){
+    //Guardar la contraseña en un archivo de configuracion o base de datos
+    String password = txtPasswordLogin.getText();
+    savePasswordToFile(password);
+}else{
+    //Borrar la contraseña guardada
+    deletePasswordFile();
+}
     }//GEN-LAST:event_jCheckBox1ActionPerformed
-
+private void savePasswordToFile(String password) {
+    try {
+        // Utiliza un archivo de configuración o base de datos para guardar la contraseña
+        FileWriter fileWriter = new FileWriter("password.txt");
+        fileWriter.write(password);
+        fileWriter.close();
+    } catch (IOException e) {
+        // Manejar la excepción
+    }
+}
+private String getPasswordFromFile() {
+    try {
+        // Utiliza un archivo de configuración o base de datos para recuperar la contraseña
+        FileReader fileReader = new FileReader("password.txt");
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        String password = bufferedReader.readLine();
+        bufferedReader.close();
+        return password;
+    } catch (IOException e) {
+        // Manejar la excepción
+        return null;
+    }
+}
+private void deletePasswordFile() {
+    try {
+        // Borrar el archivo de configuración o base de datos que contiene la contraseña
+        File file = new File("password.txt");
+        file.delete();
+    } catch (Exception e) {
+        // Manejar la excepción
+    }
+}
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        // TODO add your handling code here:
+String usuario=txtUsuarioLogin.getText();
+String pass=txtPasswordLogin.getText();
+//Validar
+if(txtUsuarioLogin.getText().equals("")||txtPasswordLogin.getText().equals("")){
+    JOptionPane.showMessageDialog(null, "Los campos no pueden estar vacios");
+}else{
+if(!usuario.equals("")||!pass.equals("")){
+    //contiene datos
+    try {
+        PreparedStatement ps =(PreparedStatement) cn.prepareStatement("SELECT tipousuario from usuarios where email='"+usuario+"' and contraseña='"+pass+"'");
+        ResultSet rs = ps.executeQuery();
+        if(rs.next()){
+            String tipousuario=rs.getString("tipousuario");
+            if(tipousuario.equalsIgnoreCase("Usuario Paciente")){
+                usuarioPaciente usuarioPaciente = new usuarioPaciente();
+                dispose();
+                usuarioPaciente.setVisible(true);
+            }
+            if(tipousuario.equalsIgnoreCase("Médico Veterinario")){
+                medicoVeterinario mv = new medicoVeterinario();
+                dispose();
+                mv.setVisible(true);
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrecto");
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "No se ha podido realizar el inicio de sesión");
+    }
+}else{
+    JOptionPane.showMessageDialog(null, "Por favor llene los campos");
+}
+}
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -244,6 +348,18 @@ public class xd extends javax.swing.JFrame {
         registro.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_abrirRegistroActionPerformed
+
+    private void ver1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ver1MouseClicked
+ver1.setVisible(false);
+ocultar1.setVisible(true);
+txtPasswordLogin.setEchoChar((char)0);
+    }//GEN-LAST:event_ver1MouseClicked
+
+    private void ocultar1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ocultar1MouseClicked
+      ver1.setVisible(true);
+      ocultar1.setVisible(false);
+      txtPasswordLogin.setEchoChar('*');
+    }//GEN-LAST:event_ocultar1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -303,7 +419,13 @@ public class xd extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel ocultar1;
     private javax.swing.JPasswordField txtPasswordLogin;
     private javax.swing.JTextField txtUsuarioLogin;
+    private javax.swing.JLabel ver1;
     // End of variables declaration//GEN-END:variables
+void limpiar(){
+    txtUsuarioLogin.setText("");
+    txtPasswordLogin.setText("");
+}
 }
